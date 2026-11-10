@@ -1,4 +1,4 @@
-import { TodoPage } from "@/features/todo/views/TodoPage";
+import { TodoPage } from "@/features/todo/views";
 
 /**
  * App Router pages stay thin.

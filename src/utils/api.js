@@ -23,39 +23,43 @@ async function parseResponse(response) {
 }
 
 export const api = {
-  get(path) {
-    return fetch(path, {
+  async get(path) {
+    const response = await fetch(path, {
       method: "GET",
       headers: { Accept: "application/json" },
-    }).then(parseResponse);
+    });
+    return parseResponse(response);
   },
 
-  post(path, body) {
-    return fetch(path, {
+  async post(path, body) {
+    const response = await fetch(path, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
-    }).then(parseResponse);
+    });
+    return parseResponse(response);
   },
 
-  patch(path, body) {
-    return fetch(path, {
+  async patch(path, body) {
+    const response = await fetch(path, {
       method: "PATCH",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
-    }).then(parseResponse);
+    });
+    return parseResponse(response);
   },
 
-  delete(path) {
-    return fetch(path, {
+  async delete(path) {
+    const response = await fetch(path, {
       method: "DELETE",
       headers: { Accept: "application/json" },
-    }).then(parseResponse);
+    });
+    return parseResponse(response);
   },
 };

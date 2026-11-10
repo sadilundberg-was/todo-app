@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { todoService } from "@/server/todos/service";
 import { createTodoPayloadSchema } from "@/server/todos/validation";
-import { getCountry } from "@/i18n/locale";
+import { getCountry } from "@/utils/locale";
 
 const todoPayloadSchema = createTodoPayloadSchema(getCountry());
 

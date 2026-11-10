@@ -4,7 +4,8 @@ import {
   PRIORITY_IDS,
   STATE_IDS,
   TAG_IDS,
-} from "@/features/todo/options";
+} from "@/features/todo/components/options";
+import { COUNTRY, DEFAULT_COUNTRY } from "@/utils/locale";
 
 /**
  * API payload validation — separate from the form schema.
@@ -38,13 +39,13 @@ function basePayloadSchema() {
 }
 
 function extendForCountry(shape, country) {
-  if (country === "SE") {
+  if (country === COUNTRY.SE) {
     shape.costCenter = z.string().trim().min(1, "Cost center is required").max(50);
     shape.state = z.string().optional().or(z.literal(""));
     return;
   }
 
-  if (country === "US") {
+  if (country === COUNTRY.US) {
     shape.state = z
       .string()
       .min(1, "State is required")
@@ -55,7 +56,7 @@ function extendForCountry(shape, country) {
   }
 }
 
-export function createTodoPayloadSchema(country = "SE") {
+export function createTodoPayloadSchema(country = DEFAULT_COUNTRY) {
   const shape = basePayloadSchema();
   extendForCountry(shape, country);
   return z.object(shape);
