@@ -1,0 +1,27 @@
+// Prisma schema — the single source of truth for your database shape.
+// Juniors: change models here, then run `npx prisma migrate dev`.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Todo {
+  id         String   @id @default(cuid())
+  title      String
+  notes      String   @default("")
+  /// low | medium | high
+  priority   String   @default("medium")
+  /// work | personal | learning | errands
+  category   String
+  /// JSON string array, e.g. ["focus","blocked"]
+  tags       String   @default("[]")
+  pinned     Boolean  @default(false)
+  completed  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

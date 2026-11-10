@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Todo App — modular Next.js example
 
-## Getting Started
+A small todo app built to show juniors how to structure a **scalable** codebase:
 
-First, run the development server:
+- **Prisma** for the database
+- **React Query** for client data fetching
+- **shadcn/ui** for reusable UI primitives
+- **React Hook Form + Zod** for forms (via shadcn `Field` + `Controller`)
+- **No auth** (yet) — keep the first slice simple
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Architecture (read this first)
+
+```
+src/
+  app/                      # Next.js routes only (stay thin)
+    api/todos/              # HTTP entrypoints → controllers
+    page.js                 # imports a feature view
+    providers.jsx           # QueryClientProvider
+
+  components/ui/            # Design system primitives (Button, Input, Card…)
+                            # Never put business logic here
+
+  features/todo/            # One folder = one product capability
+    api.js                  # Feature HTTP calls (uses utils/api)
+    schema.js               # Zod schemas (API + form validation)
+    queries.js / mutations.js
+    config/
+      options.js            # Shared option lists (priority, category, tags)
+      form.js               # Data-driven Form schema
+      list.js               # Data-driven List schema
+    views/                  # Screens: wire query/mutations + config → Form/List
+
+  components/
+    Form.jsx / List.jsx     # Shared data-driven UI (config in, behavior out)
+    ui/                     # shadcn primitives
+
+  utils/api.js              # Shared fetch helper (all features use this)
+
+  server/
+    db/prisma.js            # Prisma singleton
+    todos/
+      service.js            # Business / DB logic
+      controller.js         # Request validation + HTTP responses
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Dependency direction (important)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```
+page → feature view → feature components → components/ui
+                  ↘ feature queries/mutations → feature api → utils/api → /api/* → controller → service → prisma
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **UI primitives** know nothing about todos
+- **Feature components** know about todos + hooks
+- **Views** only compose
+- **Routes** only wire
 
-## Learn More
+When you add a new domain (e.g. `notes`), copy the `features/todo` + `server/todos` pattern — do not dump logic into `page.js`.
 
-To learn more about Next.js, take a look at the following resources:
+## Getting started
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+cp .env.example .env   # if needed
+npx prisma migrate dev
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open [http://localhost:3000](http://localhost:3000).
 
-## Deploy on Vercel
+Useful commands:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run db:studio    # browse SQLite data
+npm run db:migrate   # create/apply migrations after schema changes
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## API
+
+| Method | Path | Body | Description |
+|--------|------|------|-------------|
+| `GET` | `/api/todos` | — | List todos |
+| `POST` | `/api/todos` | `{ title, notes?, priority, category, tags[], pinned }` | Create |
+| `PATCH` | `/api/todos/:id` | partial of the above + `completed` | Update |
+| `DELETE` | `/api/todos/:id` | — | Delete |
+
+Todo fields for the form demo: **title**, **notes**, **priority** (radio), **category** (select), **tags** (checkbox group), **pinned** (switch).
+
+## Suggested next steps for juniors
+
+1. Add optimistic updates in `mutations.js`
+2. Extract a `notes` feature using the same folder shape
+3. Add auth and scope todos by `userId` in the Prisma model

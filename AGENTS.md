@@ -2,8 +2,20 @@
 
 ## This is NOT the Next.js you know
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+FRONTEND 
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+Agent ought to always keep design in components/ui, for example a Card, then consume it in components, which then are consumed by views.
+
+Agent ought to have functionality inside a features folder. For example src/features/Todo, which itself queries.jsx, mutations.jsx, views/create.jsx for example.
+
+Agent ought to have all api gathered in src/utils/api.jsx, which is consumed by a features api route file,  for example src/features/todo/api.jsx 
+
+Same för client routs.
+
+BACKEND
+
+Clear structure
+
+Use Prisma, separate functionality and controller, standard backend stuff
 
 <!-- END:nextjs-agent-rules -->
