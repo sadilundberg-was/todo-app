@@ -40,7 +40,16 @@ export const todoService = {
     return toTodo(todo);
   },
 
-  async create({ title, notes = "", priority, category, tags = [], pinned = false }) {
+  async create({
+    title,
+    notes = "",
+    priority,
+    category,
+    tags = [],
+    pinned = false,
+    costCenter = "",
+    state = "",
+  }) {
     const todo = await prisma.todo.create({
       data: {
         title: title.trim(),
@@ -49,6 +58,8 @@ export const todoService = {
         category,
         tags: serializeTags(tags),
         pinned,
+        costCenter: costCenter?.trim() ?? "",
+        state: state?.trim() ?? "",
       },
     });
     return toTodo(todo);

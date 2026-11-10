@@ -21,18 +21,24 @@ src/
                             # Never put business logic here
 
   features/todo/            # One folder = one product capability
-    api.js                  # Feature HTTP calls (uses utils/api)
-    schema.js               # Zod schemas (API + form validation)
-    queries.js / mutations.js
-    config/
-      options.js            # Shared option lists (priority, category, tags)
-      form.js               # Data-driven Form schema
-      list.js               # Data-driven List schema
-    views/                  # Screens: wire query/mutations + config → Form/List
+    api.js / queries.js / mutations.js
+    options/                # ids + options/i18n (option labels)
+    form/
+      config.js + fields/   # UI config + per-country extras
+      schema/               # Client Zod + form error i18n
+      i18n/                 # Form labels
+    list/
+      config.js + i18n/     # List schema + list copy
+    views/                  # Wire each owner's i18n → Form/List
+
+  server/todos/
+    validation.js           # API Zod (separate from form schema)
 
   components/
-    Form.jsx / List.jsx     # Shared data-driven UI (config in, behavior out)
+    Form.jsx / List.jsx     # Shared data-driven UI
     ui/                     # shadcn primitives
+
+  i18n/locale.js            # App locale + country only (tiny)
 
   utils/api.js              # Shared fetch helper (all features use this)
 

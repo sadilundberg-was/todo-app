@@ -114,8 +114,8 @@ function FieldControl({ fieldConfig, field, fieldState, disabled }) {
             </SelectTrigger>
             <SelectContent>
               {(fieldConfig.options ?? []).map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
+                <SelectItem key={option.id} value={option.id}>
+                  {option.title}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -289,7 +289,9 @@ export function Form({ mutation, schema }) {
 
           <Field orientation="horizontal">
             <Button type="submit" disabled={disabled}>
-              {disabled ? "Saving…" : (schema.submitLabel ?? "Save")}
+              {disabled
+                ? (schema.savingLabel ?? "Saving…")
+                : (schema.submitLabel ?? "Save")}
             </Button>
             <Button
               type="button"
@@ -297,7 +299,7 @@ export function Form({ mutation, schema }) {
               onClick={() => form.reset()}
               disabled={disabled}
             >
-              Reset
+              {schema.resetLabel ?? "Reset"}
             </Button>
           </Field>
         </FieldGroup>

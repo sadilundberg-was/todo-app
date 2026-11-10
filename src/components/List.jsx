@@ -32,12 +32,9 @@ function getByAccessor(item, accessor) {
   return item?.[accessor];
 }
 
-function resolveOptionLabel(value, meta) {
-  const match = (meta.options ?? []).find(
-    (option) => option[meta.value] === value,
-  );
-  if (!match) return null;
-  return match[meta.label];
+function resolveOptionLabel(value, options = []) {
+  const match = options.find((option) => option.id === value);
+  return match?.title ?? null;
 }
 
 function resolveMetaLabels(item, metaConfig = []) {
@@ -45,17 +42,23 @@ function resolveMetaLabels(item, metaConfig = []) {
 
   for (const meta of metaConfig) {
     const raw = getByAccessor(item, meta.accessor);
+    if (raw == null || raw === "") continue;
 
     if (meta.multiple) {
       for (const value of raw ?? []) {
-        const label = resolveOptionLabel(value, meta);
+        const label = resolveOptionLabel(value, meta.options);
         if (label) labels.push(label);
       }
       continue;
     }
 
-    const label = resolveOptionLabel(raw, meta);
-    if (label) labels.push(label);
+    if (meta.options) {
+      const label = resolveOptionLabel(raw, meta.options);
+      if (label) labels.push(label);
+      continue;
+    }
+
+    labels.push(String(raw));
   }
 
   return labels;

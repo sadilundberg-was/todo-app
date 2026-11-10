@@ -1,0 +1,7 @@
+import { getTranslations } from "@/i18n/getTranslations";
+import en from "@/features/todo/form/fields/US/i18n/en";
+import sv from "@/features/todo/form/fields/US/i18n/sv";
+
+const messages = { en, sv };
+
+export const getUSFieldsI18n = (locale) => getTranslations(messages, locale);

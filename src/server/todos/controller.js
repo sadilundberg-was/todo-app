@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
-import { createTodoSchema } from "@/features/todo/schema";
 import { todoService } from "@/server/todos/service";
+import { createTodoPayloadSchema } from "@/server/todos/validation";
+import { getCountry } from "@/i18n/locale";
+
+const todoPayloadSchema = createTodoPayloadSchema(getCountry());
 
 /**
  * Todo controller — HTTP boundary.
@@ -28,7 +31,7 @@ export const todoController = {
 
   async create(request) {
     const body = await request.json();
-    const parsed = createTodoSchema.safeParse(body);
+    const parsed = todoPayloadSchema.safeParse(body);
 
     if (!parsed.success) {
       const message = parsed.error.issues[0]?.message ?? "Invalid todo payload";
@@ -77,6 +80,14 @@ export const todoController = {
 
     if (typeof body?.completed === "boolean") {
       data.completed = body.completed;
+    }
+
+    if (typeof body?.costCenter === "string") {
+      data.costCenter = body.costCenter.trim();
+    }
+
+    if (typeof body?.state === "string") {
+      data.state = body.state.trim();
     }
 
     if (Object.keys(data).length === 0) {
