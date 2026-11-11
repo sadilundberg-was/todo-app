@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { todoService } from "@/server/todos/service";
-import { createTodoPayloadSchema } from "@/server/todos/validation";
+import { aCreateTodoPayloadSchema } from "@/server/todos/validation";
 import { getCountry } from "@/utils/locale";
 
-const todoPayloadSchema = createTodoPayloadSchema(getCountry());
+const todoPayloadSchema = aCreateTodoPayloadSchema(getCountry());
 
 /**
  * Todo controller — HTTP boundary.
@@ -29,7 +29,7 @@ export const todoController = {
     return NextResponse.json(todos);
   },
 
-  async create(request) {
+  async aCreate(request) {
     const body = await request.json();
     const parsed = todoPayloadSchema.safeParse(body);
 
@@ -38,7 +38,7 @@ export const todoController = {
       return badRequest(message);
     }
 
-    const todo = await todoService.create(parsed.data);
+    const todo = await todoService.aCreate(parsed.data);
     return NextResponse.json(todo, { status: 201 });
   },
 

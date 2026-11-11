@@ -5,7 +5,7 @@ export function GET() {
   return todoController.list();
 }
 
-/** POST /api/todos — create a todo */
+/** POST /api/todos — aCreate a todo */
 export function POST(request) {
-  return todoController.create(request);
+  return todoController.aCreate(request);
 }

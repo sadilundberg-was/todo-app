@@ -7,8 +7,6 @@ import {
 } from "@/features/todo/components/options";
 import { COUNTRY, DEFAULT_COUNTRY } from "@/utils/locale";
 
-/** Client-side form validation only — not used by the API. */
-
 function baseFormSchema(errors) {
   return {
     title: z
@@ -66,10 +64,7 @@ function extendForCountry(shape, errors, country) {
   }
 }
 
-export function createTodoFormValidation(
-  t,
-  country = DEFAULT_COUNTRY,
-) {
+export function createTodoFormValidation(t, country = DEFAULT_COUNTRY) {
   const { errors } = t;
   const shape = baseFormSchema(errors);
   extendForCountry(shape, errors, country);

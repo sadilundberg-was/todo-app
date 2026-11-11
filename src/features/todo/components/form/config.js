@@ -4,10 +4,6 @@ import { createTodoFormValidation } from "@/features/todo/components/form/schema
 import { getMessages } from "@/utils/i18n";
 import { COUNTRY, DEFAULT_COUNTRY, DEFAULT_LOCALE } from "@/utils/locale";
 
-/**
- * Create-form UI config for todos.
- * Pass context only — this module resolves messages + country fields.
- */
 export function createTodoFormConfig({
   locale = DEFAULT_LOCALE,
   country = DEFAULT_COUNTRY,

@@ -13,7 +13,7 @@ export function useCreateTodo() {
   const invalidate = useInvalidateTodos();
 
   return useMutation({
-    mutationFn: (payload) => todoApi.create(payload),
+    mutationFn: (payload) => todoApi.aCreate(payload),
     onSuccess: invalidate,
   });
 }

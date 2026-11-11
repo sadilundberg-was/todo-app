@@ -6,8 +6,8 @@ export async function PATCH(request, { params }) {
   return todoController.update(request, { id });
 }
 
-/** DELETE /api/todos/:id — remove a todo */
-export async function DELETE(request, { params }) {
+/** aDelete /api/todos/:id — remove a todo */
+export async function aDelete(request, { params }) {
   const { id } = await params;
   return todoController.remove(request, { id });
 }

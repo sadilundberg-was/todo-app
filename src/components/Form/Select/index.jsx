@@ -20,8 +20,9 @@ export function SelectField({ fieldConfig, field, fieldState, disabled }) {
     <Field data-invalid={isInvalid}>
       <FieldLabel htmlFor={id}>{fieldConfig.label}</FieldLabel>
       <Select
+        key={field.value || `${field.name}-empty`}
         name={field.name}
-        value={field.value}
+        value={field.value || undefined}
         onValueChange={field.onChange}
         disabled={disabled}
       >

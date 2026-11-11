@@ -17,31 +17,33 @@ import {
   useToggleTodo,
 } from "@/features/todo/data/mutations";
 import { useTodos } from "@/features/todo/data/queries";
+import { getTodoPermissions } from "@/features/todo/data/permissions";
+import { usePermissions } from "@/hooks/usePermissions";
 import { getCountry, getLocale } from "@/utils/locale";
 
-/**
- * Feature view — pass context; form/list configs resolve the rest.
- * Flip DEFAULT_LOCALE / DEFAULT_COUNTRY (LOCALE.* / COUNTRY.*) in src/utils/locale.js.
- */
 export function TodoPage() {
-  const createTodo = useCreateTodo();
+  const aCreateTodo = useCreateTodo();
   const todosQuery = useTodos();
-  const toggleTodo = useToggleTodo();
-  const deleteTodo = useDeleteTodo();
+  const aToggleTodo = useToggleTodo();
+  const aDeleteTodo = useDeleteTodo();
+  
+  const permissions = usePermissions(getTodoPermissions);
 
   const locale = getLocale();
   const country = getCountry();
 
   const formConfig = createTodoFormConfig({ locale, country });
-  const listConfig = createTodoListConfig({ locale, country });
+  const listConfig = createTodoListConfig({ locale, country, permissions });
 
   return (
-    <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-8 px-4 py-12">
-      <Card className="w-full">
-        <CardContent className="pt-6">
-          <Form mutation={createTodo} config={formConfig} />
-        </CardContent>
-      </Card>
+    <main className="flex flex-1 flex-col gap-8 py-12">
+      {permissions.aCreate ? (
+        <Card className="w-full">
+          <CardContent className="pt-6">
+            <Form mutation={aCreateTodo} config={formConfig} />
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card className="w-full">
         <CardHeader>
@@ -51,7 +53,7 @@ export function TodoPage() {
         <CardContent>
           <List
             query={todosQuery}
-            mutations={{ toggle: toggleTodo, delete: deleteTodo }}
+            mutations={{ aToggle: aToggleTodo, aDelete: aDeleteTodo }}
             config={listConfig}
           />
         </CardContent>

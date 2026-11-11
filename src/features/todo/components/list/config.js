@@ -5,14 +5,16 @@ import { COUNTRY, DEFAULT_COUNTRY, DEFAULT_LOCALE } from "@/utils/locale";
 
 /**
  * List UI config for todos.
- * Pass context only — this module resolves messages + country meta.
+ * Pass context only — this module resolves messages, country meta, permissions.
  */
 export function createTodoListConfig({
   locale = DEFAULT_LOCALE,
   country = DEFAULT_COUNTRY,
+  permissions = {},
 } = {}) {
   const t = getMessages(listMessages, locale);
   const { priorities, categories, tags, states } = getTodoOptions(locale);
+  const { aToggle = true, aDelete = true } = permissions;
 
   return {
     title: t.title,
@@ -42,16 +44,24 @@ export function createTodoListConfig({
             : []),
         ],
       },
-      media: {
-        type: "checkbox",
-        accessor: "completed",
-        mutation: "toggle",
-      },
+      ...(aToggle
+        ? {
+            media: {
+              type: "checkbox",
+              accessor: "completed",
+              mutation: "aToggle",
+            },
+          }
+        : {}),
       actions: [
-        {
-          type: "delete",
-          mutation: "delete",
-        },
+        ...(aDelete
+          ? [
+              {
+                type: "aDelete",
+                mutation: "aDelete",
+              },
+            ]
+          : []),
       ],
     },
   };

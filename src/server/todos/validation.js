@@ -56,7 +56,7 @@ function extendForCountry(shape, country) {
   }
 }
 
-export function createTodoPayloadSchema(country = DEFAULT_COUNTRY) {
+export function aCreateTodoPayloadSchema(country = DEFAULT_COUNTRY) {
   const shape = basePayloadSchema();
   extendForCountry(shape, country);
   return z.object(shape);

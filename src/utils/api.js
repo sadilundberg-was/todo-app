@@ -1,9 +1,4 @@
-/**
- * Shared HTTP client used by every feature API module.
- *
- * Features never call `fetch` directly — they go through this helper so
- * base URL, headers, and error handling stay in one place.
- */
+
 async function parseResponse(response) {
   if (response.status === 204) return null;
 

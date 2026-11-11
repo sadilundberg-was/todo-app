@@ -66,8 +66,8 @@ export function ListItem({ item, config, mutations }) {
   const pinned = Boolean(getByAccessor(item, title.pinnedAccessor));
   const descriptionText = buildDescription(item, description);
 
-  const toggleMutation = media?.mutation ? mutations?.[media.mutation] : null;
-  const isMediaBusy = Boolean(toggleMutation?.isPending);
+  const aToggleMutation = media?.mutation ? mutations?.[media.mutation] : null;
+  const isMediaBusy = Boolean(aToggleMutation?.isPending);
 
   const actionBusy = (actions ?? []).some((action) => {
     const mutation = mutations?.[action.mutation];
@@ -84,7 +84,7 @@ export function ListItem({ item, config, mutations }) {
             checked={Boolean(getByAccessor(item, media.accessor))}
             disabled={isBusy}
             onCheckedChange={(checked) =>
-              toggleMutation?.mutate({
+              aToggleMutation?.mutate({
                 id: item.id,
                 completed: checked === true,
               })
@@ -111,7 +111,7 @@ export function ListItem({ item, config, mutations }) {
           {actions.map((action) => {
             const mutation = mutations?.[action.mutation];
 
-            if (action.type === "delete") {
+            if (action.type === "aDelete") {
               return (
                 <Button
                   key={action.mutation}
@@ -120,7 +120,7 @@ export function ListItem({ item, config, mutations }) {
                   size="icon"
                   disabled={isBusy}
                   onClick={() => mutation?.mutate(item.id)}
-                  aria-label={`Delete "${titleText}"`}
+                  aria-label={`aDelete "${titleText}"`}
                 >
                   <Trash2 className="h-4 w-4 text-zinc-500" />
                 </Button>

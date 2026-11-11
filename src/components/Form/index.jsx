@@ -1,6 +1,7 @@
 "use client";
 
-import { Controller, useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +22,7 @@ import { TextField } from "@/components/Form/Text";
 import { TextareaField } from "@/components/Form/Textarea";
 
 /**
- * Data-driven create form.
+ * Data-driven form.
  *
  * Props:
  * - mutation → react-query mutation (whole object)
@@ -30,6 +31,11 @@ import { TextareaField } from "@/components/Form/Textarea";
  *     validation,          // Zod schema
  *     fields: [{ accessor, label, description, type, defaultValue, ... }]
  *   }
+ *
+ * Field extras:
+ * - getOptions(values)  → dynamic select options
+ * - getDisabled(values) → disable field from other values
+ * - resets: ["other"]   → clear listed fields when this field changes
  *
  * Types: text | number | textarea | checkbox | select | radio | switch
  */
@@ -50,8 +56,26 @@ function getDefaultValues(fields) {
   );
 }
 
-function FieldControl({ fieldConfig, field, fieldState, disabled }) {
-  const Component = FIELD_BY_TYPE[fieldConfig.type];
+function resolveFieldConfig(fieldConfig, values) {
+  return {
+    ...fieldConfig,
+    options: fieldConfig.getOptions
+      ? fieldConfig.getOptions(values)
+      : fieldConfig.options,
+  };
+}
+
+function FieldControl({
+  fieldConfig,
+  field,
+  fieldState,
+  disabled,
+  values,
+}) {
+  const resolved = resolveFieldConfig(fieldConfig, values);
+  const Component = FIELD_BY_TYPE[resolved.type];
+  const fieldDisabled =
+    disabled || Boolean(fieldConfig.getDisabled?.(values));
 
   if (!Component) {
     return (
@@ -63,10 +87,10 @@ function FieldControl({ fieldConfig, field, fieldState, disabled }) {
 
   return (
     <Component
-      fieldConfig={fieldConfig}
+      fieldConfig={resolved}
       field={field}
       fieldState={fieldState}
-      disabled={disabled}
+      disabled={fieldDisabled}
     />
   );
 }
@@ -74,18 +98,40 @@ function FieldControl({ fieldConfig, field, fieldState, disabled }) {
 export function Form({ mutation, config }) {
   const disabled = mutation.isPending;
 
-  const form = useForm({
+  const { control, handleSubmit, reset, setValue, subscribe } = useForm({
     resolver: zodResolver(config.validation),
     defaultValues: getDefaultValues(config.fields),
   });
 
-  async function onSubmit(values) {
-    await mutation.mutateAsync(values);
-    form.reset();
+  const values = useWatch({ control });
+
+  useEffect(() => {
+    return subscribe({
+      formState: { values: true },
+      callback: ({ name, type }) => {
+        if (type !== "change" || !name) return;
+        const fieldConfig = config.fields.find(
+          (field) => field.accessor === name,
+        );
+        if (!fieldConfig?.resets?.length) return;
+
+        for (const accessor of fieldConfig.resets) {
+          const target = config.fields.find(
+            (field) => field.accessor === accessor,
+          );
+          setValue(accessor, target?.defaultValue ?? "");
+        }
+      },
+    });
+  }, [subscribe, setValue, config.fields]);
+
+  async function onSubmit(submitValues) {
+    await mutation.mutateAsync(submitValues);
+    reset();
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <FieldSet>
         {config.title ? <FieldLegend>{config.title}</FieldLegend> : null}
         {config.description ? (
@@ -98,13 +144,14 @@ export function Form({ mutation, config }) {
               {fieldConfig.separatorBefore ? <FieldSeparator /> : null}
               <Controller
                 name={fieldConfig.accessor}
-                control={form.control}
+                control={control}
                 render={({ field, fieldState }) => (
                   <FieldControl
                     fieldConfig={fieldConfig}
                     field={field}
                     fieldState={fieldState}
                     disabled={disabled}
+                    values={values}
                   />
                 )}
               />
@@ -124,7 +171,7 @@ export function Form({ mutation, config }) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => form.reset()}
+              onClick={() => reset()}
               disabled={disabled}
             >
               {config.resetLabel ?? "Reset"}

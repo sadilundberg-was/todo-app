@@ -40,7 +40,7 @@ export const todoService = {
     return toTodo(todo);
   },
 
-  async create({
+  async aCreate({
     title,
     notes = "",
     priority,
