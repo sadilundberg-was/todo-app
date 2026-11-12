@@ -7,6 +7,7 @@ export const LOCALE = {
 export const COUNTRY = {
   SE: "SE",
   US: "US",
+  CA: "CA",
 };
 
 export const DEFAULT_LOCALE = LOCALE.SV;

@@ -53,7 +53,7 @@ function extendForCountry(shape, errors, country) {
     return;
   }
 
-  if (country === COUNTRY.US) {
+  if ([COUNTRY.US, COUNTRY.CA].includes(country)) {
     shape.state = z
       .string({ required_error: errors.stateRequired })
       .min(1, errors.stateRequired)

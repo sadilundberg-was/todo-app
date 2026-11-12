@@ -71,33 +71,27 @@ export function createTodoFormConfig({
         defaultValue: false,
         separatorBefore: true,
       },
-      ...(country === COUNTRY.SE
-        ? [
-            {
-              accessor: "costCenter",
-              label: t.fields.costCenter.label,
-              description: t.fields.costCenter.description,
-              type: "text",
-              placeholder: t.fields.costCenter.placeholder,
-              defaultValue: "",
-              separatorBefore: true,
-            },
-          ]
-        : []),
-      ...(country === COUNTRY.US
-        ? [
-            {
-              accessor: "state",
-              label: t.fields.state.label,
-              description: t.fields.state.description,
-              type: "select",
-              placeholder: t.fields.state.placeholder,
-              options: states,
-              defaultValue: "",
-              separatorBefore: true,
-            },
-          ]
-        : []),
+      {
+        accessor: "costCenter",
+        label: t.fields.costCenter.label,
+        description: t.fields.costCenter.description,
+        type: "text",
+        placeholder: t.fields.costCenter.placeholder,
+        defaultValue: "",
+        separatorBefore: true,
+        show: country === COUNTRY.SE,
+      },
+      {
+        accessor: "state",
+        label: t.fields.state.label,
+        description: t.fields.state.description,
+        type: "select",
+        placeholder: t.fields.state.placeholder,
+        options: states,
+        defaultValue: "",
+        separatorBefore: true,
+        show: [COUNTRY.US, COUNTRY.CA].includes(country),
+      },
     ],
   };
 }

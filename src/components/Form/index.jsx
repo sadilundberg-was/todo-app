@@ -36,9 +36,31 @@ import { TextareaField } from "@/components/Form/Textarea";
  * - getOptions(values)  → dynamic select options
  * - getDisabled(values) → disable field from other values
  * - resets: ["other"]   → clear listed fields when this field changes
+ * - hidden / show       → static visibility (booleans set in config)
+ * - hiddenWhen / showWhen → boolean or (values) => boolean
  *
  * Types: text | number | textarea | checkbox | select | radio | switch
  */
+
+function resolveWhen(rule, values) {
+  if (typeof rule === "function") return Boolean(rule(values));
+  return Boolean(rule);
+}
+
+function isFieldVisible(field, values) {
+  if (field.hidden === true) return false;
+  if (field.show === false) return false;
+
+  if (field.hiddenWhen !== undefined && resolveWhen(field.hiddenWhen, values)) {
+    return false;
+  }
+
+  if (field.showWhen !== undefined && !resolveWhen(field.showWhen, values)) {
+    return false;
+  }
+
+  return true;
+}
 
 const FIELD_BY_TYPE = {
   text: TextField,
@@ -134,24 +156,28 @@ export function Form({ mutation, config }) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FieldSet>
         <FieldGroup>
-          {config.fields.map((fieldConfig) => (
-            <div key={fieldConfig.accessor} className="contents">
-              {fieldConfig.separatorBefore ? <FieldSeparator /> : null}
-              <Controller
-                name={fieldConfig.accessor}
-                control={control}
-                render={({ field, fieldState }) => (
-                  <FieldControl
-                    fieldConfig={fieldConfig}
-                    field={field}
-                    fieldState={fieldState}
-                    disabled={disabled}
-                    values={values}
-                  />
-                )}
-              />
-            </div>
-          ))}
+          {config.fields.map((fieldConfig) => {
+            if (!isFieldVisible(fieldConfig, values)) return null;
+
+            return (
+              <div key={fieldConfig.accessor} className="contents">
+                {fieldConfig.separatorBefore ? <FieldSeparator /> : null}
+                <Controller
+                  name={fieldConfig.accessor}
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <FieldControl
+                      fieldConfig={fieldConfig}
+                      field={field}
+                      fieldState={fieldState}
+                      disabled={disabled}
+                      values={values}
+                    />
+                  )}
+                />
+              </div>
+            );
+          })}
 
           {mutation.isError ? (
             <FieldError>{mutation.error.message}</FieldError>
