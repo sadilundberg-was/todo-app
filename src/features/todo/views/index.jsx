@@ -22,11 +22,11 @@ import { usePermissions } from "@/hooks/usePermissions";
 import { getCountry, getLocale } from "@/utils/locale";
 
 export function TodoPage() {
-  const aCreateTodo = useCreateTodo();
   const todosQuery = useTodos();
-  const aToggleTodo = useToggleTodo();
-  const aDeleteTodo = useDeleteTodo();
-  
+  const createTodo = useCreateTodo();
+  const toggleTodo = useToggleTodo();
+  const deleteTodo = useDeleteTodo();
+
   const permissions = usePermissions(getTodoPermissions);
 
   const locale = getLocale();
@@ -38,14 +38,14 @@ export function TodoPage() {
   return (
     <main className="flex flex-1 flex-col gap-8 py-12">
       {permissions.aCreate ? (
-        <Card className="w-full">
-          <CardContent className="pt-6">
-            <Form mutation={aCreateTodo} config={formConfig} />
+        <Card>
+          <CardContent>
+            <Form mutation={createTodo} config={formConfig} />
           </CardContent>
         </Card>
       ) : null}
 
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>{listConfig.title}</CardTitle>
           <CardDescription>{listConfig.description}</CardDescription>
@@ -53,7 +53,7 @@ export function TodoPage() {
         <CardContent>
           <List
             query={todosQuery}
-            mutations={{ aToggle: aToggleTodo, aDelete: aDeleteTodo }}
+            mutations={{ aToggle: toggleTodo, aDelete: deleteTodo }}
             config={listConfig}
           />
         </CardContent>

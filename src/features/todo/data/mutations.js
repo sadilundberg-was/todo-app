@@ -1,37 +1,44 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { todoApi } from "@/features/todo/data/api";
-import { todoKeys } from "@/features/todo/data/queries";
+import { getTodoApiAdapter } from "@/features/todo/data/api";
+import { todoKeys } from "@/features/todo/data/keys";
+import { useAuth } from "@/hooks/useAuth";
 
-function useInvalidateTodos() {
+function useTodoMutation() {
   const queryClient = useQueryClient();
-  return () => queryClient.invalidateQueries({ queryKey: todoKeys.all });
+  const { clientId } = useAuth();
+
+  const invalidate = () =>
+    queryClient.invalidateQueries({ queryKey: todoKeys.list(clientId) });
+
+  return { clientId, invalidate };
 }
 
 export function useCreateTodo() {
-  const invalidate = useInvalidateTodos();
+  const { clientId, invalidate } = useTodoMutation();
 
   return useMutation({
-    mutationFn: (payload) => todoApi.aCreate(payload),
-    onSuccess: invalidate,
+    mutationFn: (payload) => getTodoApiAdapter(clientId).create(payload),
+    onSuccess: invalidate
   });
 }
 
 export function useToggleTodo() {
-  const invalidate = useInvalidateTodos();
+  const { clientId, invalidate } = useTodoMutation();
 
   return useMutation({
-    mutationFn: ({ id, completed }) => todoApi.update(id, { completed }),
-    onSuccess: invalidate,
+    mutationFn: ({ id, completed }) =>
+      getTodoApiAdapter(clientId).update(id, { completed }),
+    onSuccess: invalidate
   });
 }
 
 export function useDeleteTodo() {
-  const invalidate = useInvalidateTodos();
+  const { clientId, invalidate } = useTodoMutation();
 
   return useMutation({
-    mutationFn: (id) => todoApi.remove(id),
-    onSuccess: invalidate,
+    mutationFn: (id) => getTodoApiAdapter(clientId).remove(id),
+    onSuccess: invalidate
   });
 }

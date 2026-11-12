@@ -11,7 +11,7 @@ export function LoginPage() {
   const formConfig = createLoginFormConfig({ locale });
 
   return (
-    <main className="flex flex-1 flex-col gap-6 py-12">
+    <main className="flex flex-1 flex-col items-center justify-center gap-6 py-12">
       <Form mutation={login} config={formConfig} />
     </main>
   );
