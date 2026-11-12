@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useState } from "react";
-import { findMockUser } from "@/features/auth/mockUsers";
+import { getUserSync } from "@/features/users/data/api";
 
 export const AuthContext = createContext(null);
 
@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   function login(nextClientId, userId) {
-    const next = findMockUser(nextClientId, userId);
+    const next = getUserSync(nextClientId, userId);
     if (!next) return false;
     setClientId(nextClientId);
     setUser(next);

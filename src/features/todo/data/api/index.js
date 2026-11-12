@@ -1,4 +1,4 @@
-import { CLIENT } from "@/features/auth/mockUsers";
+import { CLIENT } from "@/features/users/constants";
 import { atlasTodoAdapter } from "@/features/todo/data/api/adapters/atlas";
 import { nordicTodoAdapter } from "@/features/todo/data/api/adapters/nordic";
 

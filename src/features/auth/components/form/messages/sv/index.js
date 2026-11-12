@@ -22,6 +22,7 @@ const sv = {
     clientInvalid: "Ogiltig klient",
     userRequired: "Välj en användare",
     userInvalid: "Ogiltig användare för denna klient",
+    userInactive: "Detta konto är avstängt eller inaktivt",
     loginFailed: "Kunde inte logga in med den användaren",
   },
 };

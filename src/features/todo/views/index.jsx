@@ -39,6 +39,10 @@ export function TodoPage() {
     <main className="flex flex-1 flex-col gap-8 py-12">
       {permissions.aCreate ? (
         <Card>
+          <CardHeader>
+            <CardTitle>{formConfig.title}</CardTitle>
+            <CardDescription>{formConfig.description}</CardDescription>
+          </CardHeader>
           <CardContent>
             <Form mutation={createTodo} config={formConfig} />
           </CardContent>

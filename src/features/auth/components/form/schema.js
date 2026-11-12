@@ -1,11 +1,7 @@
 import { z } from "zod";
-import {
-  CLIENT_IDS,
-  getAuthUserOptions,
-} from "@/features/auth/components/options";
-import { DEFAULT_LOCALE } from "@/utils/locale";
+import { CLIENT_IDS, getUserSync } from "@/features/users/data/api";
 
-export function createLoginFormValidation(t, locale = DEFAULT_LOCALE) {
+export function createLoginFormValidation(t) {
   const { errors } = t;
 
   return z
@@ -21,14 +17,22 @@ export function createLoginFormValidation(t, locale = DEFAULT_LOCALE) {
         .min(1, errors.userRequired),
     })
     .superRefine((values, ctx) => {
-      const userIds = getAuthUserOptions(values.clientId, locale).map(
-        (user) => user.id,
-      );
-      if (!userIds.includes(values.userId)) {
+      const user = getUserSync(values.clientId, values.userId);
+
+      if (!user) {
         ctx.addIssue({
           code: "custom",
           path: ["userId"],
           message: errors.userInvalid,
+        });
+        return;
+      }
+
+      if (!user.isActive) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["userId"],
+          message: errors.userInactive,
         });
       }
     });

@@ -22,6 +22,7 @@ const en = {
     clientInvalid: "Invalid client",
     userRequired: "Please select a user",
     userInvalid: "Invalid user for this client",
+    userInactive: "This account is suspended or inactive",
     loginFailed: "Could not sign in with that user",
   },
 };

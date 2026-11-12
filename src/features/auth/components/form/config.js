@@ -7,10 +7,6 @@ import { createLoginFormValidation } from "@/features/auth/components/form/schem
 import { getMessages } from "@/utils/i18n";
 import { DEFAULT_LOCALE } from "@/utils/locale";
 
-/**
- * Login form UI config.
- * Pass locale — this module resolves messages + client/user options.
- */
 export function createLoginFormConfig({ locale = DEFAULT_LOCALE } = {}) {
   const t = getMessages(formMessages, locale);
   const { clients } = getAuthOptions(locale);
@@ -21,7 +17,7 @@ export function createLoginFormConfig({ locale = DEFAULT_LOCALE } = {}) {
     submitLabel: t.submitLabel,
     savingLabel: t.savingLabel,
     resetLabel: t.resetLabel,
-    validation: createLoginFormValidation(t, locale),
+    validation: createLoginFormValidation(t),
     fields: [
       {
         accessor: "clientId",

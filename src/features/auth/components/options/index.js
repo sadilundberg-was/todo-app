@@ -1,38 +1,34 @@
-import {
-  CLIENTS,
-  getClientUsers,
-  getUserDisplayName,
-  getUserId,
-  getUserStatusLabel,
-} from "@/features/auth/mockUsers";
 import { optionsMessages } from "@/features/auth/components/options/messages";
+import { CLIENT_IDS, listUsersSync } from "@/features/users/data/api";
 import { getMessages } from "@/utils/i18n";
 import { DEFAULT_LOCALE } from "@/utils/locale";
 
-export const CLIENT_IDS = CLIENTS.map((client) => client.id);
+export { CLIENT_IDS };
 
 export function getAuthOptions(locale = DEFAULT_LOCALE) {
   const t = getMessages(optionsMessages, locale);
 
   return {
-    clients: CLIENTS.map((client) => ({
-      id: client.id,
-      title: t.clients[client.id] ?? client.id,
+    clients: CLIENT_IDS.map((id) => ({
+      id,
+      title: t.clients[id] ?? id,
     })),
   };
 }
 
 export function getAuthUserOptions(clientId, locale = DEFAULT_LOCALE) {
+  if (!clientId) return [];
+
   const t = getMessages(optionsMessages, locale);
 
-  return getClientUsers(clientId).map((user) => {
-    const status = getUserStatusLabel(user);
-    const statusLabel = status ? (t.status[status] ?? status) : "";
-    const name = getUserDisplayName(user);
+  return listUsersSync(clientId).map((user) => {
+    const statusLabel = user.status ? (t.status[user.status] ?? user.status) : "";
 
     return {
-      id: getUserId(user),
-      title: statusLabel ? `${name} (${statusLabel})` : name,
+      id: user.id,
+      title: statusLabel
+        ? `${user.displayName} (${statusLabel})`
+        : user.displayName,
     };
   });
 }

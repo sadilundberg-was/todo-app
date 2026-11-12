@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { getClientLabel } from "@/features/auth/components/options";
-import { getUserDisplayName } from "@/features/auth/mockUsers";
 import { LoginPage } from "@/features/auth/views/login";
 import { TodoPage } from "@/features/todo/views";
 import { useAuth } from "@/hooks/useAuth";
@@ -27,7 +26,7 @@ export default function Home() {
         <div className="flex items-center justify-between gap-3 py-3">
           <p className="text-sm text-zinc-600">
             <span className="font-medium text-zinc-900">
-              {getUserDisplayName(user)}
+              {user.displayName}
             </span>
             {clientLabel ? (
               <span className="text-zinc-400"> · {clientLabel}</span>

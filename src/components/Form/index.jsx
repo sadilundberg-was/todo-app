@@ -133,11 +133,6 @@ export function Form({ mutation, config }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FieldSet>
-        {config.title ? <FieldLegend>{config.title}</FieldLegend> : null}
-        {config.description ? (
-          <FieldDescription>{config.description}</FieldDescription>
-        ) : null}
-
         <FieldGroup>
           {config.fields.map((fieldConfig) => (
             <div key={fieldConfig.accessor} className="contents">

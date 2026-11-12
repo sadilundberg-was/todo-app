@@ -1,4 +1,4 @@
-import { ACCOUNT_STATUS, CLIENT } from "@/features/auth/mockUsers";
+import { CLIENT } from "@/features/users/constants";
 
 const NO_ACCESS = {
   aCreate: false,
@@ -8,8 +8,7 @@ const NO_ACCESS = {
 };
 
 function resolveNordicPermissions(user) {
-  if (!user) return NO_ACCESS;
-  if (user.account?.statusCode !== ACCOUNT_STATUS.ACTIVE) return NO_ACCESS;
+  if (!user?.isActive) return NO_ACCESS;
 
   const entry = user.accesses?.find(
     (access) => access.resource === "todo.item",
