@@ -29,7 +29,7 @@ function toNordic(todo) {
   return body;
 }
 
-export const nordicTodoAdapter = {
+export const nordicTodoClient = {
   async list() {
     const remote = await api.get("/api/todos");
     return remote.map(fromNordic);

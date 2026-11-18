@@ -72,7 +72,7 @@ function atlasBodyToShared(body) {
   return data;
 }
 
-export const atlasTodoAdapter = {
+export const atlasTodoClient = {
   async list() {
     const rows = await api.get("/api/todos");
     return rows.map((row) => fromAtlas(asAtlasRemote(row)));

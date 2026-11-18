@@ -18,7 +18,7 @@ export function fromNordic(remote) {
   };
 }
 
-export const nordicUserAdapter = {
+export const nordicUserClient = {
   list() {
     return NORDIC_USERS.map(fromNordic);
   },

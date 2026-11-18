@@ -16,7 +16,7 @@ export function fromAtlas(remote) {
   };
 }
 
-export const atlasUserAdapter = {
+export const atlasUserClient = {
   list() {
     return ATLAS_USERS.map(fromAtlas);
   },

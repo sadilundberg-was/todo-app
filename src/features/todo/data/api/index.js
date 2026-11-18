@@ -1,17 +1,17 @@
 import { CLIENT } from "@/features/users/constants";
-import { atlasTodoAdapter } from "@/features/todo/data/api/adapters/atlas";
-import { nordicTodoAdapter } from "@/features/todo/data/api/adapters/nordic";
+import { atlasTodoClient } from "@/features/todo/data/api/clients/atlas";
+import { nordicTodoClient } from "@/features/todo/data/api/clients/nordic";
 
 const ADAPTERS = {
-  [CLIENT.NORDIC]: nordicTodoAdapter,
-  [CLIENT.ATLAS]: atlasTodoAdapter,
+  [CLIENT.NORDIC]: nordicTodoClient,
+  [CLIENT.ATLAS]: atlasTodoClient,
 };
 
 
-export function getTodoApiAdapter(clientId) {
-  const adapter = ADAPTERS[clientId];
-  if (!adapter) {
-    throw new Error(`No todo API adapter registered for client: ${clientId}`);
+export function getTodoApiClient(clientId) {
+  const client = ADAPTERS[clientId];
+  if (!client) {
+    throw new Error(`No todo API client registered for client: ${clientId}`);
   }
-  return adapter;
+  return client;
 }

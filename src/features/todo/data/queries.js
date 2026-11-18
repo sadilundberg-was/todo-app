@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getTodoApiAdapter } from "@/features/todo/data/api";
+import { getTodoApiClient } from "@/features/todo/data/api";
 import { useAuth } from "@/hooks/useAuth";
 import { todoKeys } from "@/features/todo/data/keys";
 
@@ -10,7 +10,7 @@ export function useTodos() {
 
   return useQuery({
     queryKey: todoKeys.list(clientId),
-    queryFn: () => getTodoApiAdapter(clientId).list(),
+    queryFn: () => getTodoApiClient(clientId).list(),
     enabled: Boolean(clientId),
   });
 }
