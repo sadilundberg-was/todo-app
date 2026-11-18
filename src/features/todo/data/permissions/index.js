@@ -1,7 +1,13 @@
 import { CLIENT } from "@/features/users/constants";
 import { atlasTodoPermissions } from "@/features/todo/data/permissions/clients/atlas";
 import { nordicTodoPermissions } from "@/features/todo/data/permissions/clients/nordic";
-import { NO_ACCESS } from "@/features/todo/data/permissions/shared";
+
+const NO_ACCESS = {
+  aCreate: false,
+  aEdit: false,
+  aToggle: false,
+  aDelete: false,
+};
 
 const CLIENTS = {
   [CLIENT.NORDIC]: nordicTodoPermissions,

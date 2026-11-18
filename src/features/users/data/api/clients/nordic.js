@@ -1,5 +1,5 @@
 import { ACCOUNT_STATUS, USER_STATUS } from "@/features/users/constants";
-import { NORDIC_USERS } from "@/features/users/data/mock/nordic";
+import { NORDIC_USERS } from "@/features/users/data/mock/clients/nordic";
 
 /**
  * Nordic BE → shared app user.

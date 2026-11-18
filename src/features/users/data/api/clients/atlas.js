@@ -1,5 +1,5 @@
 import { USER_STATUS } from "@/features/users/constants";
-import { ATLAS_USERS } from "@/features/users/data/mock/atlas";
+import { ATLAS_USERS } from "@/features/users/data/mock/clients/atlas";
 
 /**
  * Atlas BE → shared app user.

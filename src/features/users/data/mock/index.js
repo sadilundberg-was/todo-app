@@ -1,6 +1,6 @@
 import { CLIENT } from "@/features/users/constants";
-import { ATLAS_USERS } from "@/features/users/data/mock/atlas";
-import { NORDIC_USERS } from "@/features/users/data/mock/nordic";
+import { ATLAS_USERS } from "@/features/users/data/mock/clients/atlas";
+import { NORDIC_USERS } from "@/features/users/data/mock/clients/nordic";
 
 export const CLIENTS = [
   { id: CLIENT.NORDIC, users: NORDIC_USERS },
